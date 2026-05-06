@@ -1,3 +1,6 @@
+using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
+using CriptoTrabalhoFinalInfraestrutura.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Binance Integration
+builder.Services.AddHttpClient<IBinanceIntegration, BinanceIntegration>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Binance:BaseUrl"] ?? "https://api.binance.com/");
+});
+
+builder.Services.AddScoped<IBinanceService, BinanceService>();
 
 var app = builder.Build();
 
