@@ -17,6 +17,7 @@ builder.Services.AddHttpClient<IBinanceIntegration, BinanceIntegration>(client =
 });
 
 builder.Services.AddScoped<IBinanceService, BinanceService>();
+builder.Services.AddScoped<IBinanceTickerService, BinanceTickerService>();
 
 var app = builder.Build();
 
