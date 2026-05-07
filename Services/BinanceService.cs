@@ -1,0 +1,30 @@
+using CriptoTrabalhoFinalInfraestrutura.DTOs;
+using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
+
+namespace CriptoTrabalhoFinalInfraestrutura.Services;
+
+public class BinanceService : IBinanceService
+{
+    private readonly IBinanceIntegration _binanceIntegration;
+
+    public BinanceService(IBinanceIntegration binanceIntegration)
+    {
+        _binanceIntegration = binanceIntegration;
+    }
+
+    public async Task<IEnumerable<NegociacaoRecenteDTO>> GetRecentTradesAsync(string symbol, int limit)
+    {
+        var trades = await _binanceIntegration.GetRecentTradesAsync(symbol, limit);
+
+        return trades.Select(t => new NegociacaoRecenteDTO
+        {
+            Id = t.Id,
+            Preco = t.Price,
+            Quantidade = t.Qty,
+            QuantidadeCotacao = t.QuoteQty,
+            Horario = t.Time,
+            EhComprador = t.IsBuyerMaker,
+            EhMelhorCorrespondencia = t.IsBestMatch
+        });
+    }
+}
