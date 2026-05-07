@@ -1,8 +1,6 @@
-using CriptoTrabalhoFinalInfraestrutura.Configuration;
 using CriptoTrabalhoFinalInfraestrutura.DTOs;
 using CriptoTrabalhoFinalInfraestrutura.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Controllers;
 
@@ -10,14 +8,15 @@ namespace CriptoTrabalhoFinalInfraestrutura.Controllers;
 [Route("api/[controller]")]
 public sealed class LogsController(
     ILogRepository logRepository,
-    IOptions<DatabaseSettings> databaseSettings) : ControllerBase
+    IConfiguration configuration) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<LogDto>>> GetLatestAsync(
         [FromQuery] int? quantidade,
         CancellationToken cancellationToken)
     {
-        var count = quantidade.GetValueOrDefault(databaseSettings.Value.DefaultLatestLogsCount);
+        var defaultLatestLogsCount = configuration.GetValue<int?>("Database:DefaultLatestLogsCount") ?? 50;
+        var count = quantidade.GetValueOrDefault(defaultLatestLogsCount);
         if (count <= 0)
         {
             return BadRequest("A quantidade deve ser maior que zero.");

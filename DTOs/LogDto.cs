@@ -6,7 +6,7 @@ public sealed class LogDto
 
     public DateTime Horario { get; init; }
 
-    public string Criptos { get; init; } = string.Empty;
+    public IReadOnlyList<string> Criptos { get; init; } = [];
 
     public string Mensagem { get; init; } = string.Empty;
 }

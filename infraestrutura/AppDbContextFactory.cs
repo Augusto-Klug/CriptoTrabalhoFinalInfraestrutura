@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace CriptoTrabalhoFinalInfraestrutura.Data;
+namespace CriptoTrabalhoFinalInfraestrutura.infraestrutura;
 
 public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {

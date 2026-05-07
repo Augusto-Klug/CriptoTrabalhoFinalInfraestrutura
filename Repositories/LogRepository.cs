@@ -1,12 +1,12 @@
-using CriptoTrabalhoFinalInfraestrutura.Data;
-using CriptoTrabalhoFinalInfraestrutura.Models;
+using CriptoTrabalhoFinalInfraestrutura.Entities;
+using CriptoTrabalhoFinalInfraestrutura.infraestrutura;
 using Microsoft.EntityFrameworkCore;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Repositories;
 
 public sealed class LogRepository(AppDbContext dbContext) : ILogRepository
 {
-    public async Task<IReadOnlyList<LogEntry>> GetLatestAsync(int count, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<LogEntity>> GetLatestAsync(int count, CancellationToken cancellationToken = default)
     {
         return await dbContext.Logs
             .AsNoTracking()
@@ -16,17 +16,17 @@ public sealed class LogRepository(AppDbContext dbContext) : ILogRepository
             .ToListAsync(cancellationToken);
     }
 
-    public Task<LogEntry?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public Task<LogEntity?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return dbContext.Logs
             .AsNoTracking()
             .FirstOrDefaultAsync(log => log.Id == id, cancellationToken);
     }
 
-    public async Task<LogEntry> AddAsync(LogEntry logEntry, CancellationToken cancellationToken = default)
+    public async Task<LogEntity> AddAsync(LogEntity logEntity, CancellationToken cancellationToken = default)
     {
-        dbContext.Logs.Add(logEntry);
+        dbContext.Logs.Add(logEntity);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return logEntry;
+        return logEntity;
     }
 }

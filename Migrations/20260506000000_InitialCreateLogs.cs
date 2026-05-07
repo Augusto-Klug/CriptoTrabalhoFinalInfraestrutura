@@ -1,10 +1,14 @@
 using System;
+using CriptoTrabalhoFinalInfraestrutura.infraestrutura;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace CriptoTrabalhoFinalInfraestrutura.Migrations
 {
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20260506000000_InitialCreateLogs")]
     public partial class InitialCreateLogs : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

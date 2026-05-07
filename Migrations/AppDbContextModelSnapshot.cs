@@ -1,5 +1,6 @@
 using System;
-using CriptoTrabalhoFinalInfraestrutura.Data;
+using System.Collections.Generic;
+using CriptoTrabalhoFinalInfraestrutura.infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -20,7 +21,7 @@ namespace CriptoTrabalhoFinalInfraestrutura.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CriptoTrabalhoFinalInfraestrutura.Models.LogEntry", b =>
+            modelBuilder.Entity("CriptoTrabalhoFinalInfraestrutura.Entities.LogEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,10 +30,13 @@ namespace CriptoTrabalhoFinalInfraestrutura.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Criptos")
+                    b.Property<List<string>>("Criptos")
                         .IsRequired()
                         .HasColumnType("varchar(max)")
-                        .HasColumnName("criptos");
+                        .HasColumnName("criptos")
+                        .HasConversion(
+                            value => LogEntryConversions.SerializeCriptos(value),
+                            value => LogEntryConversions.DeserializeCriptos(value));
 
                     b.Property<DateTime>("Horario")
                         .HasColumnType("datetime2")
@@ -46,6 +50,11 @@ namespace CriptoTrabalhoFinalInfraestrutura.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("logs");
+                });
+
+            modelBuilder.Entity("CriptoTrabalhoFinalInfraestrutura.Entities.LogEntry", b =>
+                {
+                    b.Property<List<string>>("Criptos").Metadata.SetValueComparer(LogEntryConversions.CriptosComparer);
                 });
 #pragma warning restore 612, 618
         }

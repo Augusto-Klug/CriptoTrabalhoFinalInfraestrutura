@@ -1,12 +1,12 @@
-namespace CriptoTrabalhoFinalInfraestrutura.Models;
+namespace CriptoTrabalhoFinalInfraestrutura.Entities;
 
-public sealed class LogEntry
+public sealed class LogEntity
 {
     public int Id { get; set; }
 
     public DateTime Horario { get; set; }
 
-    public string Criptos { get; set; } = string.Empty;
+    public List<string> Criptos { get; set; } = [];
 
     public string Mensagem { get; set; } = string.Empty;
 }

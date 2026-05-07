@@ -1,12 +1,12 @@
-using CriptoTrabalhoFinalInfraestrutura.Models;
+using CriptoTrabalhoFinalInfraestrutura.Entities;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Repositories;
 
 public interface ILogRepository
 {
-    Task<IReadOnlyList<LogEntry>> GetLatestAsync(int count, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<LogEntity>> GetLatestAsync(int count, CancellationToken cancellationToken = default);
 
-    Task<LogEntry?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<LogEntity?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-    Task<LogEntry> AddAsync(LogEntry logEntry, CancellationToken cancellationToken = default);
+    Task<LogEntity> AddAsync(LogEntity logEntity, CancellationToken cancellationToken = default);
 }

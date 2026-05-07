@@ -19,19 +19,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
-      start_period: 20s
+      start_period: 20s 
 
   api:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     container_name: criptotrabalhofinal-api
     depends_on:
       sqlserver:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
-      ASPNETCORE_HTTP_PORTS: "8080"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=CriptoTrabalhoFinalInfraestrutura;User Id=sa;Password=CriptoTrabalhoFinal@2026;TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True"
     ports:
       - "8080:8080"
