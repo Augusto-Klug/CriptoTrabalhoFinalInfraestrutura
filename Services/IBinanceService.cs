@@ -1,8 +1,8 @@
-using CriptoTrabalhoFinalInfraestrutura.DTOs.Binance;
+using CriptoTrabalhoFinalInfraestrutura.DTOs;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Services;
 
 public interface IBinanceService
 {
-    Task<IEnumerable<RecentTradeResponse>> GetRecentTradesAsync(string symbol, int limit);
+    Task<IEnumerable<NegociacaoRecenteDTO>> GetRecentTradesAsync(string symbol, int limit);
 }
