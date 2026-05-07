@@ -6,11 +6,11 @@ namespace CriptoTrabalhoFinalInfraestrutura.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BinanceController : ControllerBase
+public class TradesRecentesController : ControllerBase
 {
     private readonly IBinanceService _binanceService;
 
-    public BinanceController(IBinanceService binanceService)
+    public TradesRecentesController(IBinanceService binanceService)
     {
         _binanceService = binanceService;
     }
