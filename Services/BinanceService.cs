@@ -1,17 +1,14 @@
 using CriptoTrabalhoFinalInfraestrutura.DTOs;
 using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
-using System.Net.Http.Json;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Services;
 
 public class BinanceService : IBinanceService
 {
     private readonly IBinanceIntegration _binanceIntegration;
-    private readonly HttpClient _httpClient;
 
-    public BinanceService(HttpClient httpClient, IBinanceIntegration binanceIntegration)
+    public BinanceService(IBinanceIntegration binanceIntegration)
     {
-        _httpClient = httpClient;
         _binanceIntegration = binanceIntegration;
     }
 
@@ -29,14 +26,5 @@ public class BinanceService : IBinanceService
             EhComprador = t.IsBuyerMaker,
             EhMelhorCorrespondencia = t.IsBestMatch
         });
-    }
-
-    public async Task<object?> GetReferencePriceAsync(string symbol)
-    {
-        var response = await _httpClient.GetAsync($"api/v3/referencePrice?symbol={symbol}");
-        response.EnsureSuccessStatusCode();
-
-        var referencePrice = await response.Content.ReadFromJsonAsync<object>();
-        return referencePrice;
     }
 }
