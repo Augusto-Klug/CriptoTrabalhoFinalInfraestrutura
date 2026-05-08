@@ -20,4 +20,13 @@ public class BinanceIntegration : IBinanceIntegration
         var trades = await response.Content.ReadFromJsonAsync<IEnumerable<RecentTradeResponse>>();
         return trades ?? Enumerable.Empty<RecentTradeResponse>();
     }
+
+    public async Task<TickerPriceResponse> GetTickerPriceAsync(string symbol)
+    {
+        var response = await _httpClient.GetAsync($"api/v3/ticker/price?symbol={symbol}");
+        response.EnsureSuccessStatusCode();
+
+        var ticker = await response.Content.ReadFromJsonAsync<TickerPriceResponse>();
+        return ticker ?? new TickerPriceResponse();
+    }
 }
