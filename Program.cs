@@ -1,14 +1,20 @@
+using CriptoTrabalhoFinalInfraestrutura.Extensions;
+using CriptoTrabalhoFinalInfraestrutura.infraestrutura;
+using CriptoTrabalhoFinalInfraestrutura.Repositories;
+using Microsoft.EntityFrameworkCore;
 using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
 using CriptoTrabalhoFinalInfraestrutura.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 // Binance Integration
 builder.Services.AddHttpClient<IBinanceIntegration, BinanceIntegration>(client =>
@@ -21,7 +27,6 @@ builder.Services.AddScoped<IBinanceTickerService, BinanceTickerService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -31,5 +36,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.InitializeDatabaseAsync();
 
 app.Run();
