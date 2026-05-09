@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace CriptoTrabalhoFinalInfraestrutura.infraestrutura;
 
@@ -7,9 +8,15 @@ public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 {
     public AppDbContext CreateDbContext(string[] args)
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddEnvironmentVariables()
+            .Build();
+
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer(
-            "Server=localhost,11433;Database=CriptoTrabalhoFinalInfraestrutura;User Id=sa;Password=CriptoTrabalhoFinal@2026;TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        optionsBuilder.UseSqlServer(connectionString);
 
         return new AppDbContext(optionsBuilder.Options);
     }

@@ -1,6 +1,4 @@
 <Solution>
-  <Folder Name="/Testes/">
-    <Project Path="Testes/CriptoTrabalhoFinalInfraestrutura.Tests/CriptoTrabalhoFinalInfraestrutura.Tests.csproj" />
-  </Folder>
+  <Project Path="CriptoTrabalhoFinalInfraestrutura.Tests/CriptoTrabalhoFinalInfraestrutura.Tests.csproj" />
   <Project Path="CriptoTrabalhoFinalInfraestrutura.csproj" />
 </Solution>

@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master" , "develop" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master" , "develop" ]
 
 jobs:
   build-and-test:
@@ -23,6 +23,10 @@ jobs:
 
     - name: Build
       run: dotnet build --no-restore
+      env:
+        # Exemplo de uso seguro de secrets em CI/CD
+        # Este valor deve ser configurado no GitHub em Settings > Secrets and variables > Actions
+        DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
 
     - name: Test
       run: dotnet test --no-restore --verbosity normal

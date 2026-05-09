@@ -14,7 +14,19 @@ Portas expostas no host:
 Credenciais do SQL Server:
 
 - Usuário: `sa`
-- Senha: `CriptoTrabalhoFinal@2026`
+- Senha: Definida pela variável de ambiente `DB_PASSWORD`.
+
+Para rodar via Docker Compose, você deve exportar a variável antes ou criar um arquivo `.env`:
+
+```bash
+# No Windows (PowerShell)
+$env:DB_PASSWORD="SuaSenhaSegura"
+docker compose up --build
+
+# No Linux/macOS
+export DB_PASSWORD="SuaSenhaSegura"
+docker compose up --build
+```
 
 Observações:
 

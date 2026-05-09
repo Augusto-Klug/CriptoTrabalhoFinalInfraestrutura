@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Testes\**" />
-    <Content Remove="Testes\**" />
-    <EmbeddedResource Remove="Testes\**" />
-    <None Remove="Testes\**" />
+    <Compile Remove="CriptoTrabalhoFinalInfraestrutura.Tests\**" />
+    <Content Remove="CriptoTrabalhoFinalInfraestrutura.Tests\**" />
+    <EmbeddedResource Remove="CriptoTrabalhoFinalInfraestrutura.Tests\**" />
+    <None Remove="CriptoTrabalhoFinalInfraestrutura.Tests\**" />
   </ItemGroup>
 
   <ItemGroup>

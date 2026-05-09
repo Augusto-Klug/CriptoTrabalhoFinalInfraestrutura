@@ -11,7 +11,7 @@ public class PrecoReferenciasControllerTests
 {
     // Valida ModelState e devolve BadRequest quando o request for inválido.
     [Fact]
-    public async Task GetReferencePrice_ShouldReturnBadRequest_WhenModelStateIsInvalid()
+    public async Task DeveRetornarBadRequestQuandoModelstateEhInvalido()
     {
         var mockService = new Mock<IBinanceService>();
         var controller = new PrecoReferenciasController(mockService.Object);
@@ -24,7 +24,7 @@ public class PrecoReferenciasControllerTests
 
     // Garante que o símbolo é convertido para maiúsculo antes de chamar o serviço.
     [Fact]
-    public async Task GetReferencePrice_ShouldConvertSymbolToUpperCaseBeforeCallingService()
+    public async Task DeveConverterSimboloParaMaiusculoAntesDeChamarServico()
     {
         var mockService = new Mock<IBinanceService>();
         var expectedResponse = new { price = "12345.67" };
@@ -43,7 +43,7 @@ public class PrecoReferenciasControllerTests
 
     // Verifica o retorno OkObjectResult quando o serviço responde com sucesso.
     [Fact]
-    public async Task GetReferencePrice_ShouldReturnOkObjectResult_WhenBinanceRespondsSuccessfully()
+    public async Task DeveRetornarOkQuandoServicoRespondeComSucesso()
     {
         var mockService = new Mock<IBinanceService>();
         var expectedResponse = new { price = "12345.67" };
@@ -62,7 +62,7 @@ public class PrecoReferenciasControllerTests
 
     // Retorna 500 quando o serviço lança uma exceção.
     [Fact]
-    public async Task GetReferencePrice_ShouldReturnStatusCode500_WhenServiceThrowsException()
+    public async Task DeveRetornar500QuandoServicoLancarExcecao()
     {
         var mockService = new Mock<IBinanceService>();
         mockService
@@ -80,7 +80,7 @@ public class PrecoReferenciasControllerTests
 
     // Garante que o método do serviço é chamado exatamente uma vez.
     [Fact]
-    public async Task GetReferencePrice_ShouldCallGetReferencePriceAsyncExactlyOnce()
+    public async Task DeveChamarGetReferencePriceAsyncExatamenteUmaVez()
     {
         var mockService = new Mock<IBinanceService>();
         mockService
