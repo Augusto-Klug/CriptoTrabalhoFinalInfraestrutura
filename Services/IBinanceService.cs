@@ -5,4 +5,5 @@ namespace CriptoTrabalhoFinalInfraestrutura.Services;
 public interface IBinanceService
 {
     Task<IEnumerable<NegociacaoRecenteDTO>> GetRecentTradesAsync(string symbol, int limit);
+    Task<object?> GetReferencePriceAsync(string symbol);
 }
