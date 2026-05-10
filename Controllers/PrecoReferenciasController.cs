@@ -1,4 +1,6 @@
+using CriptoTrabalhoFinalInfraestrutura.Entities;
 using CriptoTrabalhoFinalInfraestrutura.Models;
+using CriptoTrabalhoFinalInfraestrutura.Repositories;
 using CriptoTrabalhoFinalInfraestrutura.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +11,16 @@ namespace CriptoTrabalhoFinalInfraestrutura.Controllers;
 public class PrecoReferenciasController : ControllerBase
 {
     private readonly IBinanceService _binanceService;
+    private readonly ILogRepository _logRepository;
 
-    public PrecoReferenciasController(IBinanceService binanceService)
+    public PrecoReferenciasController(IBinanceService binanceService, ILogRepository logRepository)
     {
         _binanceService = binanceService;
+        _logRepository = logRepository;
     }
 
     [HttpGet("reference-price")]
-    public async Task<IActionResult> GetReferencePrice([FromQuery] PrecoReferenciaRequest request)
+    public async Task<IActionResult> GetReferencePrice([FromQuery] PrecoReferenciaRequest request, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
@@ -25,7 +29,16 @@ public class PrecoReferenciasController : ControllerBase
 
         try
         {
-            var result = await _binanceService.GetReferencePriceAsync(request.Symbol.ToUpperInvariant());
+            var symbol = request.Symbol.ToUpperInvariant();
+            var result = await _binanceService.GetReferencePriceAsync(symbol);
+
+            await _logRepository.AddAsync(new LogEntity
+            {
+                Horario = DateTime.UtcNow,
+                Criptos = [symbol],
+                Mensagem = $"Consulta de preco de referencia para {symbol}."
+            }, cancellationToken);
+
             return Ok(result);
         }
         catch (Exception)

@@ -2,7 +2,6 @@ using CriptoTrabalhoFinalInfraestrutura.DTOs.Binance;
 using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
 using CriptoTrabalhoFinalInfraestrutura.Services;
 using Moq;
-using Xunit;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Tests;
 

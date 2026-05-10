@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using CriptoTrabalhoFinalInfraestrutura.infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
