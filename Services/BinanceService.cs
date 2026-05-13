@@ -1,6 +1,5 @@
 using CriptoTrabalhoFinalInfraestrutura.DTOs;
 using CriptoTrabalhoFinalInfraestrutura.Integracao.Binance;
-using System.Net.Http.Json;
 
 namespace CriptoTrabalhoFinalInfraestrutura.Services;
 
