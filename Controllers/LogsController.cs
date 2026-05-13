@@ -12,7 +12,7 @@ public sealed class LogsController(
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<LogDto>>> GetLatestAsync(
-        [FromQuery] int? quantidade,
+        [FromQuery] int? quantidade,kjsdfjkjhal
         CancellationToken cancellationToken)
     {
         var defaultLatestLogsCount = configuration.GetValue<int?>("Database:DefaultLatestLogsCount") ?? 50;
