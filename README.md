@@ -27,7 +27,11 @@ API para monitoramento de dados do mercado de criptoativos, com integração à 
 ## 🛠️ Configuração e Execução
 
 ### Variáveis de Ambiente
-Copie o `.env.example` para `.env` e defina sua senha de banco de dados (`DB_PASSWORD`).
+Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+```env
+DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest
+DB_PASSWORD=SuaSenhaForte123!
+```
 > **Atenção:** Mantenha suas credenciais seguras utilizando variáveis de ambiente. O arquivo `.env` está no `.gitignore`.
 
 ### Rodando com Docker (Recomendado)
