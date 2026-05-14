@@ -32,10 +32,6 @@ public class BinanceService : IBinanceService
 
     public async Task<object?> GetReferencePriceAsync(string symbol)
     {
-        var response = await _httpClient.GetAsync($"api/v3/referencePrice?symbol={symbol}");
-        response.EnsureSuccessStatusCode();
-
-        var referencePrice = await response.Content.ReadFromJsonAsync<object>();
-        return referencePrice;
+        return await  _binanceIntegration.GetReferencePriceAsync(symbol);
     }
 }
