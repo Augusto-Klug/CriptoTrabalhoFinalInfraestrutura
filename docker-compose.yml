@@ -22,9 +22,7 @@ services:
       start_period: 20s 
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "${DOCKER_IMAGE}"
     container_name: criptotrabalhofinal-api
     depends_on:
       sqlserver:
