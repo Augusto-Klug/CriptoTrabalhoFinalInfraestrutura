@@ -58,3 +58,117 @@ A maneira mais rápida de subir o ambiente completo (API + SQL Server):
 A API estará disponível em `http://localhost:8080/scalar/v1`.
 
 ---
+## 📋 Relatório
+
+### 3. O que acontece se um teste falhar propositalmente?
+
+Para validar o comportamento da pipeline de CI/CD diante de falhas, foi realizado um teste através do **Pull Request #9** (`TJ:develop: Teste para CI barrar MR`)
+
+**O que foi feito:**
+Foi introduzido um erro de sintaxe proposital no arquivo `Controllers/LogsController.cs` quebrando a compilação do projeto.
+
+**O que aconteceu:**
+Ao abrir o PR, a pipeline `CI/CD Pipeline` foi disparada automaticamente (run #12). O job `build-and-test` falhou na compilação detectados pelo `dotnet build`:
+
+- `Identifier expected`
+- `Syntax error, ',' expected`
+- `Process completed with exit code 1`
+
+O PR ficou com o check da pipeline marcado como **falho**, sinalizando claramente que o código não está apto para merge. O merge pôde ser bloqueado pela proteção de branch configurada, impedindo que código quebrado chegasse à branch principal.
+
+
+#### 4. Por que nunca devemos commitar credenciais no código?
+
+Commitar senhas, strings de conexão ou chaves de API no repositório representa um risco grave de segurança pelos seguintes motivos:
+
+- **O histórico do Git é permanente:** mesmo que a credencial seja removida em um commit posterior, ela continua acessível via `git log` ou ferramentas de busca em histórico.
+- **Repositórios públicos expõem instantaneamente:** bots varrem o GitHub continuamente em busca de credenciais expostas. Uma chave vazada pode ser explorada em minutos.
+- **Repositórios privados também oferecem risco:** qualquer pessoa com acesso ao repositório passa a ter acesso às credenciais de produção, mesmo que não precise delas..
+
+A solução adotada neste projeto — variáveis de ambiente localmente via `.env` e GitHub Secrets na pipeline.
+
+#### 5. Em que cenário real isso seria útil?
+
+- **Entrega entre times:** o time de infraestrutura pode baixar o binário gerado pelo
+time de desenvolvimento e fazer o deploy manualmente em um servidor, sem precisar buildar
+o projeto localmente nem ter acesso ao código-fonte.
+
+- **Rastreabilidade de versões:** é possível associar exatamente qual binário foi gerado
+a partir de qual commit, facilitando auditorias e rollbacks. Se um bug aparecer em
+produção, basta identificar o run correspondente e baixar o artefato daquele momento.
+
+- **Ambientes sem acesso ao repositório:** servidores de produção frequentemente não
+têm acesso ao código-fonte por questões de segurança. O artefato publicado resolve
+esse problema, entregando apenas o necessário para executar a aplicação.
+
+---
+### 6. Qual versão apresentou alguma diferença de comportamento, se houver?
+
+
+
+---
+
+### 7.  Documente com print do painel de configuração no relatório
+
+![Configuração do Relatório](imagens/login/tela-login.png)
+
+---
+
+### 8. Por que paralelismo importa em pipelines de CI?
+
+Em pipelines sequenciais, cada job aguarda o anterior terminar antes de iniciar.
+Com paralelismo, múltiplos jobs rodam ao mesmo tempo, reduzindo drasticamente o
+tempo total de feedback para o desenvolvedor.
+
+No projeto, os jobs `build`, `teste` e `publish` são um exemplo prático disso:
+`build` e `teste` rodam em paralelo (nenhum depende do outro), enquanto `publish`
+aguarda o `build` com `needs: build`. Isso significa que o tempo total da pipeline
+não é a soma dos três jobs, mas sim o maior tempo entre `build` e `teste` somado
+ao tempo do `publish`.
+
+Com a matriz de versões da Tarefa 6, o paralelismo fica ainda mais evidente:
+os jobs `teste (8.0.x)` e `teste (10.0.x)` rodam simultaneamente — se fossem
+sequenciais, o tempo dobraria a cada versão adicionada.
+
+Em projetos maiores, isso representa uma diferença crítica: uma suíte de testes
+que levaria 40 minutos rodando em sequência pode ser concluída em 10 minutos
+distribuída em paralelo, acelerando o ciclo de desenvolvimento e o tempo de
+entrega de novas funcionalidades.
+
+---
+
+### 9. Diferença entre tag `latest` e tag por SHA
+
+Ao referenciar actions no workflow (ex: `actions/checkout`), é possível fixar
+a versão de três formas diferentes:
+
+| Forma | Exemplo | Comportamento |
+|---|---|---|
+| Tag `latest` | `actions/checkout@latest` | Sempre usa a versão mais recente |
+| Tag semântica | `actions/checkout@v4` | Usa a versão major fixada |
+| SHA do commit | `actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683` | Usa exatamente aquele commit, imutável |
+
+#### Tag `latest` ou tag semântica (ex: `@v4`)
+
+Mais prática e fácil de manter. O problema é que o conteúdo pode mudar sem que
+o workflow mude — uma atualização da action pode introduzir comportamentos
+diferentes ou quebrar a pipeline silenciosamente. Para projetos acadêmicos ou
+ambientes de desenvolvimento, é a escolha mais comum e suficiente.
+
+#### Tag por SHA
+
+Aponta para um commit específico e imutável no repositório da action. Mesmo que
+o mantenedor publique uma nova versão ou, em um cenário malicioso, sobrescreva
+uma tag existente, o workflow continuará executando exatamente o mesmo código
+que foi auditado e aprovado.
+
+#### Quando usar cada uma?
+
+- **Tag semântica (`@v4`):** uso geral, projetos internos, ambientes de desenvolvimento.
+Boa prática de manutenção sem abrir mão de segurança razoável.
+
+- **SHA fixo:** ambientes de produção, pipelines que lidam com secrets sensíveis,
+projetos que seguem padrões de segurança rigorosos (ex: SOC 2, ISO 27001). É a
+recomendação oficial do GitHub para workflows que acessam credenciais críticas,
+pois elimina o risco de supply chain attacks — ataques onde um pacote ou
+dependência é comprometido para injetar código malicioso na pipeline.
