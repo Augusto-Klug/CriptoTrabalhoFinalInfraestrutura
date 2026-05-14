@@ -28,4 +28,13 @@ public class BinanceIntegration : IBinanceIntegration
         var ticker = await response.Content.ReadFromJsonAsync<TickerPriceResponse>();
         return ticker ?? new TickerPriceResponse();
     }
+    
+    public async Task<object?> GetReferencePriceAsync(string symbol)
+    {
+        var response = await _httpClient.GetAsync($"api/v3/referencePrice?symbol={symbol}");
+        response.EnsureSuccessStatusCode();
+
+        var referencePrice = await response.Content.ReadFromJsonAsync<object>();
+        return referencePrice;
+    }
 }
