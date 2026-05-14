@@ -76,6 +76,7 @@ Ao abrir o PR, a pipeline `CI/CD Pipeline` foi disparada automaticamente (run #1
 
 O PR ficou com o check da pipeline marcado como **falho**, sinalizando claramente que o código não está apto para merge. O merge pôde ser bloqueado pela proteção de branch configurada, impedindo que código quebrado chegasse à branch principal.
 
+---
 
 #### 4. Por que nunca devemos commitar credenciais no código?
 
@@ -86,6 +87,8 @@ Commitar senhas, strings de conexão ou chaves de API no repositório representa
 - **Repositórios privados também oferecem risco:** qualquer pessoa com acesso ao repositório passa a ter acesso às credenciais de produção, mesmo que não precise delas..
 
 A solução adotada neste projeto — variáveis de ambiente localmente via `.env` e GitHub Secrets na pipeline.
+
+---
 
 #### 5. Em que cenário real isso seria útil?
 
@@ -130,10 +133,9 @@ Com a matriz de versões da Tarefa 6, o paralelismo fica ainda mais evidente:
 os jobs `teste (8.0.x)` e `teste (10.0.x)` rodam simultaneamente — se fossem
 sequenciais, o tempo dobraria a cada versão adicionada.
 
-Em projetos maiores, isso representa uma diferença crítica: uma suíte de testes
-que levaria 40 minutos rodando em sequência pode ser concluída em 10 minutos
-distribuída em paralelo, acelerando o ciclo de desenvolvimento e o tempo de
-entrega de novas funcionalidades.
+Nosso CI/CD:
+
+![Configuração do Relatório](images/image.png)
 
 ---
 
