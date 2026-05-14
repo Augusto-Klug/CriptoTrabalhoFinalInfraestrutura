@@ -1,5 +1,7 @@
 # CriptoTrabalhoFinalInfraestrutura
 
+Integrantes: Lucas Parisotto, Augusto Klug, Thiago Jung, Thyago Floriano, Lauro Pereira Neto Schautica, André Victor Duarte Zeni
+
 Esta API é uma solução robusta para monitoramento de dados do mercado de criptoativos, integrando-se diretamente com a API da Binance para fornecer informações em tempo real sobre preços, trades recentes e cotações de referência.
 
 ### Como rodar utilizando Docker
@@ -115,13 +117,20 @@ esse problema, entregando apenas o necessário para executar a aplicação.
 ---
 ### 6. Qual versão apresentou alguma diferença de comportamento, se houver?
 
+Foi adicionada a `strategy.matrix` no job `teste` para executar em duas versões do .NET simultaneamente. O resultado observado foi: 
 
+CI/CD Pipeline / build (pull_request) ❌ Failing after 19s 
+CI/CD Pipeline / teste (9.0.x) ❌ Failing after 17s 
+
+O job `teste (9.0.x)` falhou no passo **Restore dependencies** com erro `NU1202`, pois os pacotes do Entity Framework Core 10.0.7 utilizados no projeto são compatíveis apenas com `net10.0`, sendo rejeitados pelo `dotnet restore` ao tentar rodar em `net9.0`. O job `teste (10.0.x)` foi cancelado como consequência da falha no `build`. 
+
+A matriz cumpriu seu papel: evidenciou de forma automatizada que o projeto é compatível apenas com .NET 10, resultado que sem a pipeline só seria descoberto manualmente. 
 
 ---
 
 ### 7.  Documente com print do painel de configuração no relatório
 
-![Configuração do Relatório](Images/BloqueioBranch.png)
+![Configuração do Relatório](Images/PainelConfigBranch.png)
 
 ---
 
