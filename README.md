@@ -2,6 +2,32 @@
 
 Esta API é uma solução robusta para monitoramento de dados do mercado de criptoativos, integrando-se diretamente com a API da Binance para fornecer informações em tempo real sobre preços, trades recentes e cotações de referência.
 
+### Como rodar utilizando Docker
+Nosso serviço depende de duas imagens, a da nossa prórpia API e do SQL Server.
+
+#### Opção sem clonar o repositório completo:
+Copiar o arquivo `docker-compose.yaml`, colar em alguma pasta vazia no seu PC, criar um arquivo `.env` com as seguintes variáveis:
+`DB_PASSWORD="SuaSenha"`<br>
+`DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest` - Imagem da API pública no docker hub
+
+   ```bash
+   docker compose up --build
+   ```
+A API estará disponível em `http://localhost:8080/scalar/v1`.
+
+#### Rodando com o repositório clonado:
+Segue o mesmo fluxo que o exemplo de cima, única diferença é que você terá o código inteiro do projeto baixado.
+
+Obs: O `.env` deve estar na raiz do projeto. No mesmo nível do arquivo `docker-compose.yml`
+
+## Stack utilizada
+
+- **Back-end:** API desenvolvida em **ASP.NET Core (.NET 10)**, organizada em camadas de controllers, services, repositories e integração externa.
+- **Banco de dados:** **SQL Server** para persistência dos logs de operações, com acesso via **Entity Framework Core** e controle de schema por migrations.
+- **Integração externa:** consumo da API da **Binance** via `HttpClient` para consulta de preços, trades recentes e cotações de referência.
+- **Containerização:** uso de **Docker** e **Docker Compose** para subir a API e o banco de dados de forma padronizada.
+- **Testes e documentação:** testes automatizados com **xUnit** e **Moq**, além da documentação interativa da API com **OpenAPI/Scalar**.
+
 ## 🚀 O que a API faz?
 
 - **Monitoramento de Preços:** Consulta o preço atual de qualquer par de ativos (ex: BTCUSDT).
@@ -38,24 +64,6 @@ O commit de senhas, chaves de API ou strings de conexão no código-fonte expõe
    cp .env.example .env
    ```
 2. No arquivo `.env`, defina a variável `DB_PASSWORD` e `DOCKER_IMAGE`.
-
----
-
-## 🛠️ Guia de Execução
-
-### Opção 1: Com Docker (Recomendado)
-A maneira mais rápida de subir o ambiente completo (API + SQL Server):
-
-1. Defina a variável de ambiente:
-   - `$env:DB_PASSWORD="SuaSenha"`
-   - `$env:DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest`
-- Também pode ser criado um arquivo .env dentro da pasta raiz e colocar as variáveis lá dentro.
-- **Se não quiser clonar o repositório interiro  pode apenas copiar o arquivo docker-compose.yaml e colar em alguma pasta vazia no seu PC, criar o .env lá dentro e executar o comando abaixo:**
-2. Execute o comando:
-   ```bash
-   docker compose up --build
-   ```
-A API estará disponível em `http://localhost:8080/scalar/v1`.
 
 ---
 ## 📋 Relatório
