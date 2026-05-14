@@ -113,7 +113,7 @@ esse problema, entregando apenas o necessário para executar a aplicação.
 
 ### 7.  Documente com print do painel de configuração no relatório
 
-![Configuração do Relatório](imagens/login/tela-login.png)
+![Configuração do Relatório](Images/BloqueioBranch.png)
 
 ---
 
@@ -135,7 +135,7 @@ sequenciais, o tempo dobraria a cada versão adicionada.
 
 Nosso CI/CD:
 
-![Configuração do Relatório](images/image.png)
+![Configuração do Relatório](Images/image.png)
 
 ---
 
