@@ -37,7 +37,7 @@ O commit de senhas, chaves de API ou strings de conexão no código-fonte expõe
    ```bash
    cp .env.example .env
    ```
-2. No arquivo `.env`, defina a variável `DB_PASSWORD`.
+2. No arquivo `.env`, defina a variável `DB_PASSWORD` e `DOCKER_IMAGE`.
 
 ---
 
@@ -47,39 +47,14 @@ O commit de senhas, chaves de API ou strings de conexão no código-fonte expõe
 A maneira mais rápida de subir o ambiente completo (API + SQL Server):
 
 1. Defina a variável de ambiente:
-   - **Windows (PS):** `$env:DB_PASSWORD="SuaSenha"`
-   - **Linux/macOS:** `export DB_PASSWORD="SuaSenha"`
+   - `$env:DB_PASSWORD="SuaSenha"`
+   - `$env:DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest`
+- Também pode ser criado um arquivo .env dentro da pasta raiz e colocar as variáveis lá dentro.
+- **Se não quiser clonar o repositório interiro  pode apenas copiar o arquivo docker-compose.yaml e colar em alguma pasta vazia no seu PC, criar o .env lá dentro e executar o comando abaixo:**
 2. Execute o comando:
    ```bash
    docker compose up --build
    ```
 A API estará disponível em `http://localhost:8080/scalar/v1`.
 
-### Opção 2: Sem Docker (Local)
-Para rodar apenas a API localmente:
-
-1. Tenha um SQL Server disponível.
-2. Configure a string de conexão no `appsettings.json` ou via variável de ambiente `ConnectionStrings__DefaultConnection`.
-3. Execute:
-   ```bash
-   dotnet build
-   dotnet run
-   ```
-
 ---
-
-## 🧪 Testes Unitários
-
-O projeto possui uma suíte de 10 testes unitários automatizados cobrindo Controllers e Services. 
-Para executá-los:
-```bash
-dotnet test
-```
-
----
-
-## 🔄 CI/CD e Secrets
-
-A pipeline de CI/CD (`cicd.yaml`) automatiza o build e os testes. Ela demonstra o uso seguro de secrets referenciando `${{ secrets.DB_CONNECTION_STRING }}`. 
-
-> Para que a pipeline complete com sucesso em um ambiente real, o secret `DB_CONNECTION_STRING` deve ser cadastrado nas configurações do repositório no GitHub.
