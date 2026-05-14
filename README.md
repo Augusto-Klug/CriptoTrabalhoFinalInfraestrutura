@@ -1,85 +1,102 @@
 # CriptoTrabalhoFinalInfraestrutura
 
-Esta API é uma solução robusta para monitoramento de dados do mercado de criptoativos, integrando-se diretamente com a API da Binance para fornecer informações em tempo real sobre preços, trades recentes e cotações de referência.
+API para monitoramento de dados do mercado de criptoativos, com integração à API da Binance para informações em tempo real.
 
-## 🚀 O que a API faz?
+## 👥 Integrantes
+- Augusto Klug, Lucas Parisotto, Thiago Jung, Thyago Floriano, Lauro Pereira Neto Schautica, André Victor Duarte Zeni
 
-- **Monitoramento de Preços:** Consulta o preço atual de qualquer par de ativos (ex: BTCUSDT).
-- **Histórico de Negociações:** Recupera os trades mais recentes executados no mercado.
-- **Preços de Referência:** Fornece cotações de referência para análise de mercado.
-- **Log de Operações:** Sistema interno de persistência para auditoria de consultas realizadas.
 
----
+## 🛠️ Stack Utilizada
+- .NET 10 (C#), Entity Framework Core, SQL Server
+- Docker & Docker Compose
+- GitHub Actions (CI/CD)
+- xUnit / Moq
 
-## 🏗️ Arquitetura e Camadas
+## 🚀 Funcionalidades
+- **Monitoramento de Preços:** Preço atual de pares de ativos (ex: BTCUSDT).
+- **Histórico de Negociações:** Últimos trades executados no mercado.
+- **Preços de Referência:** Cotações para análise.
+- **Log de Operações:** Persistência interna para auditoria.
 
-O projeto segue os princípios de separação de responsabilidades para facilitar a manutenção e testabilidade:
+## 🏗️ Arquitetura
+1. **Controllers:** Porta de entrada e validação.
+2. **Services:** Lógica de negócio e orquestração.
+3. **Integração (Binance):** Comunicação com a API externa.
+4. **Repositories:** Acesso a dados via EF Core.
 
-1. **Controllers:** Porta de entrada da API. Validam as requisições (`ModelState`) e gerenciam os retornos HTTP.
-2. **Services:** Contêm a lógica de negócio e orquestram a comunicação entre a integração externa e o repositório.
-3. **Integracao (Binance):** Camada de infraestrutura responsável pela comunicação direta com a API externa via `HttpClient`.
-4. **Repositories:** Camada de acesso a dados (Entity Framework Core) para persistência dos logs.
-5. **DTOs/Entities:** Objetos de transferência de dados e entidades do banco de dados.
+## 🛠️ Configuração e Execução
 
----
+### Variáveis de Ambiente
+Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+```env
+DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest
+DB_PASSWORD=SuaSenhaForte123!
+```
+> **Atenção:** Mantenha suas credenciais seguras utilizando variáveis de ambiente. O arquivo `.env` está no `.gitignore`.
 
-## 🔐 Segurança e Configurações Sensíveis
-
-### Por que nunca devemos commitar credenciais?
-O commit de senhas, chaves de API ou strings de conexão no código-fonte expõe o sistema a ataques graves. Uma vez no histórico do Git, a informação é difícil de remover totalmente. Por isso, este projeto utiliza:
-- **Variáveis de Ambiente:** Para configurações dinâmicas e sensíveis.
-- **GitHub Secrets:** No fluxo de CI/CD para proteger credenciais em ambientes de automação.
-- **.gitignore:** Configurado para nunca subir arquivos `.env`.
-
-### Configuração das Variáveis de Ambiente
-
-1. Copie o arquivo `.env.example` para um novo arquivo chamado `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. No arquivo `.env`, defina a variável `DB_PASSWORD`.
-
----
-
-## 🛠️ Guia de Execução
-
-### Opção 1: Com Docker (Recomendado)
-A maneira mais rápida de subir o ambiente completo (API + SQL Server):
-
-1. Defina a variável de ambiente:
-   - **Windows (PS):** `$env:DB_PASSWORD="SuaSenha"`
-   - **Linux/macOS:** `export DB_PASSWORD="SuaSenha"`
-2. Execute o comando:
-   ```bash
-   docker compose up --build
-   ```
+### Rodando com Docker (Recomendado)
+```bash
+docker compose up --build
+```
 A API estará disponível em `http://localhost:8080/scalar/v1`.
 
-### Opção 2: Sem Docker (Local)
-Para rodar apenas a API localmente:
-
-1. Tenha um SQL Server disponível.
-2. Configure a string de conexão no `appsettings.json` ou via variável de ambiente `ConnectionStrings__DefaultConnection`.
-3. Execute:
-   ```bash
-   dotnet build
-   dotnet run
-   ```
-
----
+### Rodando Local (Sem Docker)
+Certifique-se de ter um SQL Server rodando, ajuste a `ConnectionStrings__DefaultConnection` e execute:
+```bash
+dotnet build
+dotnet run
+```
 
 ## 🧪 Testes Unitários
-
-O projeto possui uma suíte de 10 testes unitários automatizados cobrindo Controllers e Services. 
-Para executá-los:
+Para rodar os testes automatizados:
 ```bash
 dotnet test
 ```
 
+## 🔄 CI/CD
+A pipeline do GitHub Actions valida automaticamente a aplicação. Lembre-se de configurar o secret `DB_CONNECTION_STRING` no repositório.
+
 ---
 
-## 🔄 CI/CD e Secrets
+## 📋 Relatório
 
-A pipeline de CI/CD (`cicd.yaml`) automatiza o build e os testes. Ela demonstra o uso seguro de secrets referenciando `${{ secrets.DB_CONNECTION_STRING }}`. 
+### 3. O que acontece se um teste falhar propositalmente?
 
-> Para que a pipeline complete com sucesso em um ambiente real, o secret `DB_CONNECTION_STRING` deve ser cadastrado nas configurações do repositório no GitHub.
+Para validar o comportamento da pipeline de CI/CD diante de falhas, foi realizado um teste através do **Pull Request #9** (`TJ:develop: Teste para CI barrar MR`)
+
+**O que foi feito:**
+Foi introduzido um erro de sintaxe proposital no arquivo `Controllers/LogsController.cs` quebrando a compilação do projeto.
+
+**O que aconteceu:**
+Ao abrir o PR, a pipeline `CI/CD Pipeline` foi disparada automaticamente (run #12). O job `build-and-test` falhou na compilação detectados pelo `dotnet build`:
+
+- `Identifier expected`
+- `Syntax error, ',' expected`
+- `Process completed with exit code 1`
+
+O PR ficou com o check da pipeline marcado como **falho**, sinalizando claramente que o código não está apto para merge. O merge pôde ser bloqueado pela proteção de branch configurada, impedindo que código quebrado chegasse à branch principal.
+
+
+#### 4. Por que nunca devemos commitar credenciais no código?
+
+Commitar senhas, strings de conexão ou chaves de API no repositório representa um risco grave de segurança pelos seguintes motivos:
+
+- **O histórico do Git é permanente:** mesmo que a credencial seja removida em um commit posterior, ela continua acessível via `git log` ou ferramentas de busca em histórico.
+- **Repositórios públicos expõem instantaneamente:** bots varrem o GitHub continuamente em busca de credenciais expostas. Uma chave vazada pode ser explorada em minutos.
+- **Repositórios privados também oferecem risco:** qualquer pessoa com acesso ao repositório passa a ter acesso às credenciais de produção, mesmo que não precise delas..
+
+A solução adotada neste projeto — variáveis de ambiente localmente via `.env` e GitHub Secrets na pipeline.
+
+#### 5. Em que cenário real isso seria útil?
+
+- **Entrega entre times:** o time de infraestrutura pode baixar o binário gerado pelo
+time de desenvolvimento e fazer o deploy manualmente em um servidor, sem precisar buildar
+o projeto localmente nem ter acesso ao código-fonte.
+
+- **Rastreabilidade de versões:** é possível associar exatamente qual binário foi gerado
+a partir de qual commit, facilitando auditorias e rollbacks. Se um bug aparecer em
+produção, basta identificar o run correspondente e baixar o artefato daquele momento.
+
+- **Ambientes sem acesso ao repositório:** servidores de produção frequentemente não
+têm acesso ao código-fonte por questões de segurança. O artefato publicado resolve
+esse problema, entregando apenas o necessário para executar a aplicação.

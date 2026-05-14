@@ -28,20 +28,21 @@ jobs:
         
   teste:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['9.0.x', '10.0.x']
     
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-          
-      - name: Restore dependencies
-        run: dotnet restore
+    - uses: actions/checkout@v4
+    - name: Setup .NET ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+    - name: Restore dependencies
+      run: dotnet restore
       
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
 
   publish:
     runs-on: ubuntu-latest
