@@ -5,7 +5,7 @@ Integrantes: Lucas Parisotto, Augusto Klug, Thiago Jung, Thyago Floriano, Lauro 
 Esta API é uma solução robusta para monitoramento de dados do mercado de criptoativos, integrando-se diretamente com a API da Binance para fornecer informações em tempo real sobre preços, trades recentes e cotações de referência.
 
 ### Como rodar utilizando Docker
-Nosso serviço depende de duas imagens, a da nossa prórpia API e do SQL Server.
+Nosso serviço depende de duas imagens, a da nossa própria API e do SQL Server.
 
 #### Opção sem clonar o repositório completo:
 Copiar o arquivo `docker-compose.yaml`, colar em alguma pasta vazia no seu PC, criar um arquivo `.env` com as seguintes variáveis:
@@ -13,7 +13,7 @@ Copiar o arquivo `docker-compose.yaml`, colar em alguma pasta vazia no seu PC, c
 `DOCKER_IMAGE=thiagojm23/trabalho-cripto-final-infraestrutura:latest` - Imagem da API pública no docker hub
 
    ```bash
-   docker compose up --build
+   docker compose up --build 
    ```
 A API estará disponível em `http://localhost:8080/scalar/v1`.
 
